@@ -1,16 +1,10 @@
-mkdir Module_1 && cd Module_1
-mkdir Digital_Signature && cd Digital_Signature
-mkdir Alice Bob
-cd Alice
-openssl genpkey -algorithm RSA -out alice_privatekey.pem
-openssl rsa -in alice_privatekey.pem -out alice_publickey.pem -pubout -outform PEM
-echo "This is Alice's digest." > alice_digest.txt
-openssl dgst -sha256 -sign alice_privatekey.pem -out alice_signature.bin alice_digest.txt
-ls
-     history
-    cp alice_publickey.pem alice_signature.bin alice_digest.txt /home/aciadmin/Module_1/Digital_Signature/Bob
-     cp alice_publickey.pem alice_signature.bin alice_digest.txt ~/Module_1/Digital_Signature/Bob
-     cd ~/Module_1/Digital_Signature/Bob
-     openssl dgst -sha256 -verify alice_publickey.pem -signature alice_signature.bin alice_digest.txt
-     echo "This is a change to the digest." > alice_digest.txt
-     openssl dgst -sha256 -verify alice_publickey.pem -signature alice_signature.bin alice_digest.txt
+mkdir CSR && cd CSR
+mkdir SecPlusLLC && cd SecPlusLLC
+openssl req -newkey rsa:2048 -keyout SecPlusLLC_privatekey.pem -out SecPlusLLC.csr
+cat SecPlusLLC.csr
+mkdir /home/aciadmin/Module_1/CSR/CA && cp SecPlusLLC.csr /home/aciadmin/Module_1/CSR/CA
+openssl genpkey -algorithm RSA -out CA_privatekey.pem
+openssl req -newkey rsa:2048 -nodes -keyout CA_privatekey.pem -x509 -days 1999 -out SecPlusLLC.crt
+cat SecPlusLLC.crt
+cp SecPlusLLC.crt /home/aciadmin/Module_1/CSR/SecPlusLLC
+ls -la /home/aciadmin/Module_1/CSR/SecPlusLLC
